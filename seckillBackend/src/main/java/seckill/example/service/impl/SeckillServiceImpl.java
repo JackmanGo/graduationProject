@@ -1,15 +1,11 @@
 package seckill.example.service.impl;
 
 import org.apache.commons.collections.MapUtils;
-import org.mybatis.spring.SqlSessionTemplate;
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.DigestUtils;
 import seckill.example.dao.SeckillDao;
 import seckill.example.dao.SuccessKilledDao;
@@ -41,8 +37,6 @@ public class SeckillServiceImpl implements SeckillService
 
     @Autowired
     private RedisCacheDao redisDao;
-    @Autowired
-    private PlatformTransactionManager platformTransactionManager;
     //注入Service依赖
     @Autowired //@Resource
     private SeckillDao seckillDao;
@@ -51,8 +45,7 @@ public class SeckillServiceImpl implements SeckillService
     private SuccessKilledDao successKilledDao;
 
     @Autowired
-    private SqlSessionTemplate sqlSessionTemplate;
-
+    private SqlSession sqlSessionTemplate;
     public List<Seckill> getSeckillList() {
         return seckillDao.queryAll(0,4);
     }
@@ -107,10 +100,8 @@ public class SeckillServiceImpl implements SeckillService
      * 2.保证事务方法的执行时间尽可能短，不要穿插其他网络操作RPC/HTTP请求或者剥离到事务方法外部
      * 3.不是所有的方法都需要事务，如只有一条修改操作、只读操作不要事务控制
      */
-    @Transactional
     public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5)
             throws SeckillException, RepeatKillException, SeckillCloseException {
-        TransactionStatus transaction = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
         if (md5==null||!md5.equals(getMD5(seckillId)))
         {
             throw new SeckillException("seckill data rewrite");//秒杀数据被重写了
@@ -150,9 +141,6 @@ public class SeckillServiceImpl implements SeckillService
             logger.error(e.getMessage(),e);
             //所以编译期异常转化为运行期异常
             throw new SeckillException("seckill inner error :"+e.getMessage());
-        }finally {
-            logger.info("事务状态："+transaction.isCompleted());
-            platformTransactionManager.rollback(transaction);
         }
 
     }
@@ -183,6 +171,7 @@ public class SeckillServiceImpl implements SeckillService
             return new SeckillExecution(seckillId, SeckillStateEnum.INNER_ERROR);
         }
     }
+
 }
 
 

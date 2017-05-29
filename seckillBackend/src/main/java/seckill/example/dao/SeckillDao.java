@@ -1,7 +1,6 @@
 package seckill.example.dao;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 import seckill.example.entity.Seckill;
 
 import java.util.Date;
@@ -11,7 +10,6 @@ import java.util.Map;
 /**
  * Created by codingBoy on 16/11/26.
  */
-@Repository
 public interface SeckillDao
 {
 
@@ -46,6 +44,9 @@ public interface SeckillDao
      */
     void killByProcedure(Map<String, Object> paramMap);
 
-
+    /*
+     * 测试事务
+     */
+    void updateFirstGoods(@Param("seckillId") long seckillId);
 
 }

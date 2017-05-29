@@ -1,5 +1,6 @@
 package seckill.example.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import seckill.example.dto.Exposer;
 import seckill.example.dto.SeckillExecution;
 import seckill.example.entity.Seckill;
@@ -46,6 +47,7 @@ public interface SeckillService {
      * @param md5
      * @return
      */
+    @Transactional
     SeckillExecution executeSeckill(long seckillId,long userPhone,String md5)
             throws SeckillException,RepeatKillException,SeckillCloseException;
 
@@ -60,6 +62,7 @@ public interface SeckillService {
      * @throws RepeatKillException
      * @throws SeckillCloseException
      */
+    @Transactional
     SeckillExecution executeSeckillProcedure(long seckillId, long userPhone, String md5)
             throws SeckillException, RepeatKillException, SeckillCloseException;
 }

@@ -26,10 +26,6 @@
       <artifactId>spring-boot-starter-tomcat</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-jdbc</artifactId>
-    </dependency>
-    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
       <version>1.2</version>
@@ -37,13 +33,14 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <version>1.4.0.RELEASE</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <!--3.0的junit是使用编程的方式来进行测试，而junit4是使用注解的方式来运行junit-->
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
     <!--1.日志 java日志有:slf4j,log4j,logback,common-logging
@@ -102,19 +99,11 @@
       <artifactId>protostuff-runtime</artifactId>
       <version>1.0.8</version>
     </dependency>
-    <!--2.dao框架:MyBatis依赖-->
     <dependency>
-      <groupId>org.mybatis</groupId>
-      <artifactId>mybatis</artifactId>
-      <version>3.3.0</version>
+      <groupId>org.mybatis.spring.boot</groupId>
+      <artifactId>mybatis-spring-boot-starter</artifactId>
+      <version>1.1.1</version>
     </dependency>
-    <!--mybatis自身实现的spring整合依赖-->
-    <dependency>
-      <groupId>org.mybatis</groupId>
-      <artifactId>mybatis-spring</artifactId>
-      <version>1.2.3</version>
-    </dependency>
-
     <!--3.Servlet web相关依赖-->
     <dependency>
       <groupId>taglibs</groupId>
@@ -141,6 +130,12 @@
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <version>3.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-test</artifactId>
+      <version>1.4.0.RELEASE</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
