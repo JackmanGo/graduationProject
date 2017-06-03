@@ -1,4 +1,4 @@
-package example.seckill.kernel;
+package seckill.example.kernel;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
