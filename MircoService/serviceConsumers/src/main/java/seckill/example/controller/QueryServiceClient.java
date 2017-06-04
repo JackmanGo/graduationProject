@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @FeignClient("query-service")
 public interface QueryServiceClient {
-    @RequestMapping(method = RequestMethod.GET, value = "/time/now")
+    @RequestMapping(method = RequestMethod.GET, value = "/seckill/time/now")
     String times();
 }
