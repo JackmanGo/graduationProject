@@ -1,4 +1,4 @@
-package seckill.example.model;
+package seckill.example.dto;
 
 /**
  * Created by codingBoy on 16/11/28.

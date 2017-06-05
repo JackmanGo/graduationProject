@@ -6,12 +6,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import seckill.example.model.SeckillResult;
+import seckill.example.dto.SeckillResult;
+import seckill.example.entity.Seckill;
+import seckill.example.service.SeckillService;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/seckill") // url:模块/资源/{}/细分
@@ -19,33 +23,10 @@ public class SeckillController {
 	private static final Logger logger = LoggerFactory.getLogger(SeckillController.class);
 	@Autowired
 	private DiscoveryClient client;
+	@Autowired
+	private SeckillService seckillService;
 
     /*
-	@RequestMapping(value = "/listGoods", method = RequestMethod.GET)
-	public List<Seckill> list(HttpServletResponse response) {
-		// list.jsp+mode=ModelAndView
-		// 获取列表页
-		List<Seckill> list = seckillService.getSeckillList();
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		return list;
-	}
-
-	@RequestMapping(value = "/detail/{seckillId}", method = RequestMethod.GET)
-	public Seckill detail(@PathVariable("seckillId") Long seckillId, HttpServletResponse response) {
-		logger.info("查询的seckillId为"+seckillId);
-		logger.debug("test");
-		if (seckillId == null) {
-			logger.info("seckill为null");
-		}
-
-		Seckill seckill = seckillService.getById(seckillId);
-		if (seckill == null) {
-			logger.info("查询无结果");
-		}
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		return seckill;
-	}
-
 	// ajax ,json暴露秒杀接口的方法
 	@RequestMapping(value = "/exposer/{seckillId}", method = RequestMethod.GET, produces = {
 			"application/json;charset=UTF-8" })
@@ -88,8 +69,30 @@ public class SeckillController {
 		}
 
 	}
-
 	*/
+	@RequestMapping(value = "/detail/{seckillId}", method = RequestMethod.GET)
+	public Seckill detail(@PathVariable("seckillId") Long seckillId) {
+		logger.info("查询的seckillId为"+seckillId);
+		logger.debug("test");
+		if (seckillId == null) {
+			logger.info("seckill为null");
+		}
+
+		Seckill seckill = seckillService.getById(seckillId);
+		if (seckill == null) {
+			logger.info("查询无结果");
+		}
+		return seckill;
+	}
+
+	@RequestMapping(value = "/listGoods", method = RequestMethod.GET)
+	public List<Seckill> list() {
+		// list.jsp+mode=ModelAndView
+		// 获取列表页
+		List<Seckill> list = seckillService.getSeckillList();
+		return list;
+	}
+
 	@RequestMapping(value = "/time/now", method = RequestMethod.GET)
 	public SeckillResult<Long> time() {
 		ServiceInstance instance = client.getLocalServiceInstance();

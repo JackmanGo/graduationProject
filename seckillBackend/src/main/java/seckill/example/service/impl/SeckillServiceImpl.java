@@ -43,9 +43,7 @@ public class SeckillServiceImpl implements SeckillService
 
     @Autowired //@Resource
     private SuccessKilledDao successKilledDao;
-
-    @Autowired
-    private SqlSession sqlSessionTemplate;
+    
     public List<Seckill> getSeckillList() {
         return seckillDao.queryAll(0,4);
     }

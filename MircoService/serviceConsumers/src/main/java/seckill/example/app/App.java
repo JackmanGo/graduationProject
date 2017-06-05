@@ -48,7 +48,6 @@ public class App {
     */
     @RequestMapping(value = "/time/now", method = RequestMethod.GET)
     public String time() {
-        logger.info("接受请求");
         return feignClient.times();
     }
 
