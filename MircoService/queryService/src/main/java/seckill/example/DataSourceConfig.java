@@ -1,14 +1,12 @@
-package seckill.example.app;
+package seckill.example;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 
 import javax.sql.DataSource;
 
@@ -17,19 +15,25 @@ import javax.sql.DataSource;
  */
 @Configuration
 public class DataSourceConfig {
+    @Autowired
+    DataSource dataSource;
+    /*
+    dataSource直接注入，需要数据库连接池则在application.properties中配置
     @Bean
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
     }
+    */
     @Bean
-    public SqlSessionFactory getSqlSessionFactory(DataSource dataSource) throws Exception {
+    public SqlSessionFactory getSqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
+        /*下面的两个配置，全部放在application.properties
         //为映射文件的resultType设置别名，package批量设置，默认去除包名的类名为别名
         sessionFactory.setTypeAliasesPackage("seckill.example.entity");
-        //添加XML目录
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         sessionFactory.setConfigLocation(resolver.getResource("classpath:mybatis-config.xml"));
+        */
         return sessionFactory.getObject();
     }
     /*
