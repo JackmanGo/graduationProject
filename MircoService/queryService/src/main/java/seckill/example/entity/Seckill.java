@@ -1,11 +1,15 @@
 package seckill.example.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by wang on 17-6-5.
  */
-public class Seckill {
+public class Seckill implements Serializable{
+
+    private static final long serialVersionUID = 183487127611231237L;
+
     private long seckillId;
     private String name;
     private int number;

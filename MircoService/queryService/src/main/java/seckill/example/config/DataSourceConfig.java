@@ -1,4 +1,4 @@
-package seckill.example;
+package seckill.example.config;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -7,6 +7,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 
 import javax.sql.DataSource;
 
@@ -28,12 +30,12 @@ public class DataSourceConfig {
     public SqlSessionFactory getSqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
-        /*下面的两个配置，全部放在application.properties
+        /*下面的两个配置，全部放在application.properties*/
         //为映射文件的resultType设置别名，package批量设置，默认去除包名的类名为别名
         sessionFactory.setTypeAliasesPackage("seckill.example.entity");
+        
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         sessionFactory.setConfigLocation(resolver.getResource("classpath:mybatis-config.xml"));
-        */
         return sessionFactory.getObject();
     }
     /*
