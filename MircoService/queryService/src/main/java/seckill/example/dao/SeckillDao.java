@@ -17,7 +17,7 @@ public interface SeckillDao {
      * @return
      */
     @Select("SELECT * FROM seckill WHERE seckill_id=#{seckillId}")
-    @Options(useCache=true)
+    @Options(useCache=false)
     Seckill queryById(@Param("seckillId") long seckillId);
 
     /**

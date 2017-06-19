@@ -7,11 +7,15 @@ import org.apache.ibatis.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
+import redis.clients.jedis.BinaryJedisCluster;
+import redis.clients.jedis.HostAndPort;
 import seckill.example.entity.Seckill;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -20,7 +24,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 @Component
 public class RedisCache implements Cache {
-    private Jedis redisTemplate = getJedis();
+    private BinaryJedisCluster redisTemplate = getJedis();
     private static final Logger logger = LoggerFactory.getLogger(RedisCache.class);
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private  String id; // cache instance id
@@ -57,7 +61,7 @@ public class RedisCache implements Cache {
         ValueOperations opsForValue = redisTemplate.opsForValue();
         opsForValue.set(key, value, EXPIRE_TIME_IN_MINUTES, TimeUnit.MINUTES);
         */
-        byte[] bytesKey = key.toString().getBytes();
+        byte[] bytesKey = key.toString().getBytes(Charset.forName("UTF-8"));
         redisTemplate.setex(bytesKey,EXPIRE_TIME_IN_MINUTES,bytesValue);
         logger.debug("Put query result to redis");
     }
@@ -66,7 +70,7 @@ public class RedisCache implements Cache {
      */
     @Override
     public Object getObject(Object key) {
-        byte[] bytesKey = key.toString().getBytes();
+        byte[] bytesKey = key.toString().getBytes(Charset.forName("UTF-8"));
         byte[] bytesValue = redisTemplate.get(bytesKey);
         logger.info("get cache key:"+bytesKey);
         logger.info("get cache value:"+bytesValue);
@@ -89,7 +93,7 @@ public class RedisCache implements Cache {
      */
     @Override
     public Object removeObject(Object key) {
-        redisTemplate.del(key.toString());
+        redisTemplate.del(key.toString().getBytes(Charset.forName("UTF-8")));
         logger.debug("Remove cached query result from redis");
         return null;
     }
@@ -98,7 +102,7 @@ public class RedisCache implements Cache {
      */
     @Override
     public void clear() {
-        redisTemplate.flushDB();
+        //redisTemplate.flushDB();
         logger.debug("Clear all the cached query result from redis");
     }
     /*
@@ -106,19 +110,21 @@ public class RedisCache implements Cache {
      */
     @Override
     public int getSize() {
-        return 0;
+        return 1024;
     }
     /*
-     *实现原子性的缓存操作使用的锁
-     */
+    *实现原子性的缓存操作使用的锁
+    */
     @Override
     public ReadWriteLock getReadWriteLock() {
         return readWriteLock;
     }
 
-    public Jedis getJedis(){
-        Jedis jedis = new Jedis("127.0.0.1",6379);
-        return  jedis;
+    public BinaryJedisCluster getJedis(){
+        Set<HostAndPort> jedisClusterNodes = new HashSet<HostAndPort>();
+        jedisClusterNodes.add(new HostAndPort("127.0.0.1", 7000));
+        BinaryJedisCluster jc = new BinaryJedisCluster(jedisClusterNodes);
+        return jc;
     }
 
 }

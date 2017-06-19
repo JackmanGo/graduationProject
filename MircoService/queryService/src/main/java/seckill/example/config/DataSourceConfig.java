@@ -33,7 +33,6 @@ public class DataSourceConfig {
         /*下面的两个配置，全部放在application.properties*/
         //为映射文件的resultType设置别名，package批量设置，默认去除包名的类名为别名
         sessionFactory.setTypeAliasesPackage("seckill.example.entity");
-        
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         sessionFactory.setConfigLocation(resolver.getResource("classpath:mybatis-config.xml"));
         return sessionFactory.getObject();
