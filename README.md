@@ -7,5 +7,5 @@ MircoService为微服务器化后的每个项目
 #### 微服务后的端口分配
 服务注册中心MircoService/serviceKernal,监听端口8000
 查询服务MircoService/queryService,监听端口8001。service-id:query-service
-服务消费者MircoService/serviceConsumers,监听端口8002。service-id:service-consumer
+执行服务MircoService/execSeckillService,监听端口8002。service-id:exec-service
 服务网关zuul，监听端口8003。service-id:api

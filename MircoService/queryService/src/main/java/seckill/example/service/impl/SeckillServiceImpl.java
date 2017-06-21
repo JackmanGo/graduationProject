@@ -3,6 +3,7 @@ package seckill.example.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import seckill.example.dao.SeckillDao;
+import seckill.example.entity.SuccessKilled;
 import seckill.example.entity.Seckill;
 import seckill.example.service.SeckillService;
 
@@ -24,5 +25,10 @@ public class SeckillServiceImpl implements SeckillService {
     @Override
     public Seckill getById(long seckillId) {
         return seckillDao.queryById(seckillId);
+    }
+
+    @Override
+    public SuccessKilled getSuccessSeckill(long seckillId, long userPhone) {
+        return seckillDao.getSuccessSeckill(seckillId,userPhone);
     }
 }
