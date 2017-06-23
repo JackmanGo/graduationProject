@@ -1,15 +1,13 @@
 package seckill.example.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.ResultType;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.Date;
 
 /**
  * Created by wang on 17-6-21.
  */
+@Mapper
 public interface SuccessKilledDao {
     /**
      * 减库存,执行时保证秒杀时间等均是对的

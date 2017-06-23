@@ -102,7 +102,7 @@ public class SeckillServiceImpl implements SeckillService
             throws SeckillException, RepeatKillException, SeckillCloseException {
         if (md5==null||!md5.equals(getMD5(seckillId)))
         {
-            throw new SeckillException("seckill data rewrite");//秒杀数据被重写了
+            throw new SeckillRequestException("seckill request data error");//md5不一致秒杀数据被重写了
         }
         //执行秒杀逻辑:减库存+增加购买明细
         Date nowTime=new Date();

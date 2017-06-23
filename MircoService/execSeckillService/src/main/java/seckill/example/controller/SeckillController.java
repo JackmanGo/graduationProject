@@ -10,6 +10,7 @@ import seckill.example.dto.SeckillResult;
 import seckill.example.enums.SeckillStateEnum;
 import seckill.example.exception.RepeatKillException;
 import seckill.example.exception.SeckillCloseException;
+import seckill.example.exception.SeckillRequestException;
 import seckill.example.service.SeckillService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -48,18 +49,25 @@ public class SeckillController {
         if (phone == null) {
             return new SeckillResult<SeckillExecution>(false, "未注册");
         }
-        SeckillResult<SeckillExecution> result;
-
         try {
+            //悲观锁 调用秒杀，通过减库存和增加购买明细两步操作
             SeckillExecution execution = seckillService.executeSeckill(seckillId, phone, md5);
             return new SeckillResult<SeckillExecution>(true, execution);
+        } catch (SeckillRequestException e1) {
+            //拦截md5错误的异常
+            SeckillExecution execution = new SeckillExecution(seckillId, SeckillStateEnum.DATA_REWRITE);
+            return new SeckillResult<SeckillExecution>(true, execution);
         } catch (RepeatKillException e1) {
+            //拦截重复秒杀的异常
             SeckillExecution execution = new SeckillExecution(seckillId, SeckillStateEnum.REPEAT_KILL);
             return new SeckillResult<SeckillExecution>(true, execution);
         } catch (SeckillCloseException e2) {
+            //拦截秒杀活动已关闭异常
             SeckillExecution execution = new SeckillExecution(seckillId, SeckillStateEnum.END);
             return new SeckillResult<SeckillExecution>(true, execution);
         } catch (Exception e) {
+            //未知异常
+            logger.error(e.getMessage());
             SeckillExecution execution = new SeckillExecution(seckillId, SeckillStateEnum.INNER_ERROR);
             return new SeckillResult<SeckillExecution>(true, execution);
         }

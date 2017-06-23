@@ -1,6 +1,7 @@
 package seckill.example.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import seckill.example.consumers.QueryServiceClient;
@@ -13,6 +14,7 @@ import seckill.example.enums.SeckillStateEnum;
 import seckill.example.exception.RepeatKillException;
 import seckill.example.exception.SeckillCloseException;
 import seckill.example.exception.SeckillException;
+import seckill.example.exception.SeckillRequestException;
 import seckill.example.service.SeckillService;
 
 import java.util.Date;
@@ -20,6 +22,7 @@ import java.util.Date;
 /**
  * Created by wang on 17-6-21.
  */
+@Service
 public class SeckillServiceImpl implements SeckillService{
     @Autowired
     public SuccessKilledDao successKilledDao;
@@ -62,7 +65,7 @@ public class SeckillServiceImpl implements SeckillService{
     public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5) throws SeckillException, RepeatKillException, SeckillCloseException {
         if (md5==null||!md5.equals(getMD5(seckillId)))
         {
-            throw new SeckillException("seckill data rewrite");//md5不一致秒杀数据被重写了
+            throw new SeckillRequestException("seckill request data error");//md5不一致秒杀数据被重写了
         }
         //执行秒杀逻辑:减库存+增加购买明细
         Date nowTime=new Date();
