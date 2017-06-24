@@ -18,7 +18,7 @@ MircoService为微服务器化后的每个项目
 查询全部商品 GET  :/commodities
 查询某个商品的详情 GET :/commodity/{commodityId}
 查询某个用户对于某件商品秒杀成功的详情: GET :/seckill/{commodityId}
-** exec-service查询接口命令： **
+** exec-service查询接口命令：**
 查询秒杀接口 GET :/{commodityId}
 执行秒杀操作 POST :/{seckillId}/{md5}
 
