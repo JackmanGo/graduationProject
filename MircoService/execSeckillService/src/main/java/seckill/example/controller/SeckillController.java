@@ -19,13 +19,12 @@ import javax.servlet.http.HttpServletResponse;
  * Created by wang on 17-6-21.
  */
 @RestController
-@RequestMapping("/seckill") // url:模块/资源/{}/细分
 public class SeckillController {
     private static final Logger logger = LoggerFactory.getLogger(SeckillController.class);
     @Autowired
     public SeckillService seckillService;
 
-    @RequestMapping(value = "/exposer/{seckillId}", method = RequestMethod.GET, produces = {
+    @RequestMapping(value = "/{seckillId}", method = RequestMethod.GET, produces = {
             "application/json;charset=UTF-8" })
     public SeckillResult<Exposer> exposer(@PathVariable("seckillId") Long seckillId, HttpServletResponse response) {
         SeckillResult<Exposer> result;
@@ -41,7 +40,7 @@ public class SeckillController {
         return result;
     }
 
-    @RequestMapping(value = "/execution/{seckillId}/{md5}", method = RequestMethod.POST, produces = {
+    @RequestMapping(value = "/{seckillId}/{md5}", method = RequestMethod.POST, produces = {
             "application/json;charset=UTF-8" })
     public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId") Long seckillId,
                                                    @PathVariable("md5") String md5, @CookieValue(value = "killPhone", required = false) Long phones) {

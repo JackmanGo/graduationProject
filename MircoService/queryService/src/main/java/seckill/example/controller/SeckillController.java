@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/seckill") // url:模块/资源/{}/细分
 public class SeckillController {
 	private static final Logger logger = LoggerFactory.getLogger(SeckillController.class);
 	@Autowired
@@ -26,7 +25,7 @@ public class SeckillController {
 	/**
 	 *查询某个详情商品
 	 **/
-	@RequestMapping(value = "/detail/{seckillId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/commodity/{seckillId}", method = RequestMethod.GET)
 	public Seckill detail(@PathVariable("seckillId") Long seckillId) {
 		logger.info("查询的seckillId为"+seckillId);
 		logger.debug("test");
@@ -43,7 +42,7 @@ public class SeckillController {
 	/**
      *查询全部商品
      **/
-	@RequestMapping(value = "/listGoods", method = RequestMethod.GET)
+	@RequestMapping(value = "commodities", method = RequestMethod.GET)
 	public List<Seckill> list() {
 		// list.jsp+mode=ModelAndView
 		// 获取列表页
@@ -53,7 +52,7 @@ public class SeckillController {
 	/**
 	 *查询秒杀成功结果
 	 **/
-	@RequestMapping(value = "/success/{seckilled}", method = RequestMethod.GET)
+	@RequestMapping(value = "/seckill/{seckilled}", method = RequestMethod.GET)
 	public SuccessKilled successDetail(@PathVariable long seckillId,@RequestParam("userPhone")long userPhone) {
 		return seckillService.getSuccessSeckill(seckillId,userPhone);
 	}

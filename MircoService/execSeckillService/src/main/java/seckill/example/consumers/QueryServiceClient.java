@@ -12,10 +12,10 @@ import seckill.example.entity.SuccessKilled;
  */
 @FeignClient("query-service")
 public interface QueryServiceClient {
-    @RequestMapping(method = RequestMethod.GET, value = "/seckill/detail/{seckillId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/commodity/{seckillId}")
     Seckill getDetails(@PathVariable("seckillId") Long seckillId);
     //long userPhone必须是参数第一位 负责会报错Body parameters cannot be used with form parameters.
-    @RequestMapping(method = RequestMethod.GET, value = "/seckill/success/{seckilled}")
+    @RequestMapping(method = RequestMethod.GET, value = "/seckill/{seckilled}")
     SuccessKilled querySuccessSeckill(long userPhone,@PathVariable("seckillId") long seckillId);
 }
 
