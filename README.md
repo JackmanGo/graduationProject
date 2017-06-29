@@ -22,7 +22,5 @@ MircoService为微服务器化后的每个项目
 ** exec-service查询接口命令：**
 查询秒杀接口 GET :/{commodityId}
 执行秒杀操作 POST :/{seckillId}/{md5}
-** deductBalance-service接口命令：**
-扣余额接口 PATCH :/balances/{price}/{goodsId}
 
 
