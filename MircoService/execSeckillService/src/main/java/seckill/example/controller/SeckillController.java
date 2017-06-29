@@ -1,5 +1,6 @@
 package seckill.example.controller;
 
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +44,14 @@ public class SeckillController {
     @RequestMapping(value = "/{seckillId}/{md5}", method = RequestMethod.POST, produces = {
             "application/json;charset=UTF-8" })
     public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId") Long seckillId,
-                                                   @PathVariable("md5") String md5, @CookieValue(value = "killPhone", required = false) Long phones) {
+                                                   @PathVariable("md5") String md5, @Param("price") long price, @CookieValue(value = "killPhone", required = false) Long phones) {
         Long phone = Long.valueOf("18408221624");
         if (phone == null) {
             return new SeckillResult<SeckillExecution>(false, "未注册");
         }
         try {
             //悲观锁 调用秒杀，通过减库存和增加购买明细两步操作
-            SeckillExecution execution = seckillService.executeSeckill(seckillId, phone, md5);
+            SeckillExecution execution = seckillService.executeSeckill(seckillId, phone, md5,price);
             return new SeckillResult<SeckillExecution>(true, execution);
         } catch (SeckillRequestException e1) {
             //拦截md5错误的异常

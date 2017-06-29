@@ -36,6 +36,24 @@ CREATE TABLE `success_killed`(
   `create_time` TIMESTAMP NOT NULL COMMENT '创建时间',
   PRIMARY KEY(seckill_id,user_phone),/*联合主键*/
   KEY idx_create_time(create_time)
-)ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='秒杀成功明细表'
+)ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='秒杀成功明细表';
 
-  -- SHOW CREATE TABLE seckill;#显示表的创建信息
+-- SHOW CREATE TABLE seckill;#显示表的创建信息
+-- 用户余额信息表
+CREATE TABLE `user_info`(
+  `user_info_id` BIGINT NOT NUll AUTO_INCREMENT COMMENT '用户ID',
+  `user_phone` BIGINT NOT NULL COMMENT '用户手机号',
+  `balances` BIGINT NOT NULL COMMENT '用户余额',
+  PRIMARY KEY (user_info_id)
+)ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='用户信息表(目前仅包含余额)';
+-- 用户交易明细表
+CREATE TABLE `transaction_detail`(
+  `transaction_detail_id` BIGINT NOT NUll AUTO_INCREMENT COMMENT '交易详情ID',
+  `user_phone` BIGINT NOT NULL COMMENT '用户手机号',
+  `goodsId` BIGINT NOT NULL COMMENT '商品ID',
+  `beforeBalances` BIGINT NOT NULL COMMENT '付款前的余额',
+  `afterBalances` BIGINT NOT NULL COMMENT '付款后的余额',
+  PRIMARY KEY (transaction_details_id)
+)ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='交易详情表';
+
+ 

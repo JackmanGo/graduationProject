@@ -15,6 +15,7 @@ import seckill.example.exception.RepeatKillException;
 import seckill.example.exception.SeckillCloseException;
 import seckill.example.exception.SeckillException;
 import seckill.example.exception.SeckillRequestException;
+import seckill.example.mq.MQProducer;
 import seckill.example.service.SeckillService;
 
 import java.util.Date;
@@ -28,6 +29,8 @@ public class SeckillServiceImpl implements SeckillService{
     public SuccessKilledDao successKilledDao;
     @Autowired
     QueryServiceClient queryServiceClient;
+    @Autowired
+    MQProducer mqProducer;
 
     //加入一个混淆字符串(秒杀接口)的salt，为了我避免用户猜出我们的md5值，值任意给，越复杂越好
     private final String salt="asdasdq2wadiio124rhalkd'l.";
@@ -62,7 +65,7 @@ public class SeckillServiceImpl implements SeckillService{
      */
     @Override
     @Transactional
-    public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5) throws SeckillException, RepeatKillException, SeckillCloseException {
+    public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5,long price)  {
         if (md5==null||!md5.equals(getMD5(seckillId)))
         {
             throw new SeckillRequestException("seckill request data error");//md5不一致秒杀数据被重写了
@@ -76,6 +79,13 @@ public class SeckillServiceImpl implements SeckillService{
                 //没有更新库存记录，说明秒杀结束
                 throw new SeckillCloseException("seckill is closed");
             } else {
+                /**
+                 *分布式事务1：向消息中间件发送一条预备消息
+                 **/
+                mqProducer.sendPrepareMessage();
+                /**
+                 *执行本地事务
+                **/
                 //否则更新了库存，秒杀成功,增加明细
                 int insertCount = successKilledDao.insertSuccessKilled(seckillId, userPhone);
                 //每个用户限购一件，看是否该明细被重复插入，即用户是否重复秒杀
@@ -83,6 +93,11 @@ public class SeckillServiceImpl implements SeckillService{
                     throw new RepeatKillException("seckill repeated");
                 } else {
                     //秒杀成功,得到成功插入的明细记录,并返回成功秒杀的信息
+                    /**
+                     * 发送提交消息给消息中间件
+                     */
+                    //开始减用户余额，涉及分布式事物问题
+                    mqProducer.sendMessage(userPhone,seckillId,price);
                     //查询query服务
                     SuccessKilled successKilled = queryServiceClient.querySuccessSeckill(seckillId, userPhone);
                     return new SeckillExecution(seckillId, SeckillStateEnum.SUCCESS, successKilled);

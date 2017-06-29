@@ -26,7 +26,7 @@ public interface SeckillService {
      * @return
      */
     @Transactional
-    SeckillExecution executeSeckill(long seckillId, long userPhone, String md5)
+    SeckillExecution executeSeckill(long seckillId, long userPhone, String md5,long price)
             throws SeckillException,RepeatKillException,SeckillCloseException;
 
 }
