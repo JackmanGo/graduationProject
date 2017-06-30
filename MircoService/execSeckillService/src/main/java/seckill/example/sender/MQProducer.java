@@ -1,4 +1,4 @@
-package seckill.example.mq;
+package seckill.example.sender;
 
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.client.producer.SendResult;

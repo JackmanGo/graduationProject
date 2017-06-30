@@ -15,7 +15,7 @@ import seckill.example.exception.RepeatKillException;
 import seckill.example.exception.SeckillCloseException;
 import seckill.example.exception.SeckillException;
 import seckill.example.exception.SeckillRequestException;
-import seckill.example.mq.MQProducer;
+import seckill.example.sender.MQProducer;
 import seckill.example.service.SeckillService;
 
 import java.util.Date;
